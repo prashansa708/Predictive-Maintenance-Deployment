@@ -1,24 +1,23 @@
-
-# Use the official lightweight Python image
+# Use official Python 3.9 slim image
 FROM python:3.9-slim
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Install system dependencies for XGBoost/Scikit-learn
+# Install system requirements for XGBoost/LightGBM if needed
 RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements file and install Python libraries
+# Copy requirements and install
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Copy all application files
 COPY . .
 
-# Expose the port Streamlit runs on (Hugging Face default is 7860)
+# Hugging Face Spaces runs on port 7860
 EXPOSE 7860
 
-# Command to run the app
+# Run the application
 CMD ["streamlit", "run", "app.py", "--server.port", "7860", "--server.address", "0.0.0.0"]
